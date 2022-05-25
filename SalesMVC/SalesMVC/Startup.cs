@@ -39,14 +39,17 @@ namespace SalesMVC
             services.AddDbContext<SalesMVCContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SalesMVCContext"), builder =>
                         builder.MigrationsAssembly("SalesMVC")));
+
+            services.AddScoped<SeedingService>(); //registra o serviço no sistema de injeção de dependencia
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seeding)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seeding.Seed();
             }
             else
             {
